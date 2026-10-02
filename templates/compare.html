@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>多标的对比</title>
+  <style>
+    body { background: #0e1117; color: #e6e6e6; font-family: "Segoe UI", sans-serif; margin: 2rem; }
+    table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+    th, td { border: 1px solid #333; padding: 0.5rem 0.75rem; text-align: left; }
+    th { background: #1a2230; }
+    .status-ok { color: #4caf50; }
+    .status-fail { color: #ef5350; }
+    .status-excluded { color: #ffb300; }
+    .notes { background: #1a2230; border-left: 4px solid #ffb300; padding: 0.75rem 1rem; margin: 1rem 0; }
+    .notes p { margin: 0.25rem 0; }
+  </style>
+</head>
+<body>
+  <h1>多标的走势对比</h1>
+  <p>标的：{{ symbols }} ｜ 区间：{{ start }} ~ {{ end }}</p>
+
+  {% if notes %}
+  <div class="notes">
+    {% for note in notes %}
+    <p>{{ note }}</p>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if chart %}
+  <div class="chart">{{ chart | safe }}</div>
+  {% endif %}
+
+  <table>
+    <thead>
+      <tr>
+        <th>代码</th><th>状态</th><th>首日归一值</th><th>末日归一值</th><th>数据点</th><th>说明</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr>
+        <td>{{ row.symbol }}</td>
+        <td class="{% if row.status == '成功' %}status-ok{% elif row.status == '失败' %}status-fail{% else %}status-excluded{% endif %}">{{ row.status }}</td>
+        <td>{{ row.first or "-" }}</td>
+        <td>{{ row.last or "-" }}</td>
+        <td>{{ row.points or "-" }}</td>
+        <td>{{ row.detail }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

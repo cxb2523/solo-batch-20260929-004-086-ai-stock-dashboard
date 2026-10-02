@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>单标的行情</title>
+  <style>
+    body { background: #0e1117; color: #e6e6e6; font-family: "Segoe UI", sans-serif; margin: 2rem; }
+    .error { color: #ef5350; }
+    input { padding: 0.4rem; }
+  </style>
+</head>
+<body>
+  <h1>单标的行情</h1>
+  <form method="get" action="/">
+    <input name="symbol" value="{{ symbol }}" placeholder="如 AAPL">
+    <button type="submit">查询</button>
+  </form>
+  {% if error %}
+  <p class="error">{{ error }}</p>
+  {% endif %}
+  {% if chart %}
+  <div class="chart">{{ chart | safe }}</div>
+  {% endif %}
+</body>
+</html>

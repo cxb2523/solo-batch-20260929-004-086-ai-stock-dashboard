@@ -39,6 +39,26 @@ A comprehensive, AI-powered stock market dashboard that combines advanced techni
 
 ![Technical Analysis](screenshots/technical_analysis.jpg)
 
+## 🌐 Web API & Compare Page
+
+Besides the Streamlit dashboard (`stock_dashboard.py`), the repo ships a FastAPI
+service for batch comparison:
+
+```bash
+uvicorn app:app --port 8000
+```
+
+- **`/compare?symbols=AAPL,MSFT`** — compare up to 6 symbols (comma-separated).
+  Fetches concurrently (4 workers, 3s per-symbol timeout with one retry),
+  aligns on common trading days, normalizes each series to 100 at its first
+  common day, and marks failed symbols in the result table without failing
+  the page.
+- **`/`** — single-symbol page; **`/api/stock/{symbol}`** — JSON closes.
+
+Price data is cached on disk under `.cache/prices/` keyed by symbol + date
+range, written via temp file + atomic replace. Run tests with
+`python -m pytest -q`.
+
 ## 🚀 Quick Start
 
 ### Prerequisites
