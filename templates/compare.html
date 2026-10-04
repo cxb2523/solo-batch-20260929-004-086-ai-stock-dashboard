@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <title>Stock Compare</title>
+  <style>
+    body { font-family: "Segoe UI", Arial, sans-serif; margin: 24px; color: #222; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+    th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
+    th { background: #f5f5f5; }
+    .note { background: #fff8e1; border: 1px solid #ffe082; padding: 8px 12px; margin: 8px 0; border-radius: 4px; }
+    .failed { color: #b71c1c; }
+    .ok { color: #1b5e20; }
+    form { margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <h1>多标的对比</h1>
+  <form method="get" action="/compare">
+    <input type="text" name="symbols" value="{{ symbols_param }}" size="40" placeholder="AAA,BBB,...">
+    <input type="date" name="start" value="{{ start }}">
+    <input type="date" name="end" value="{{ end }}">
+    <button type="submit">对比</button>
+  </form>
+
+  {% for note in notes %}
+  <div class="note">{{ note }}</div>
+  {% endfor %}
+
+  <table>
+    <thead>
+      <tr>
+        <th>代码</th><th>状态</th><th>首日归一值</th><th>末日归一值</th><th>区间涨跌</th><th>备注</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr class="{{ 'failed' if not row.ok else 'ok' }}">
+        <td>{{ row.symbol }}</td>
+        <td>{{ '成功' if row.ok else '失败' }}</td>
+        <td>{{ row.first }}</td>
+        <td>{{ row.last }}</td>
+        <td>{{ row.change }}</td>
+        <td>{{ row.message }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if chart %}
+  <div id="compare-chart">{{ chart|safe }}</div>
+  {% endif %}
+</body>
+</html>

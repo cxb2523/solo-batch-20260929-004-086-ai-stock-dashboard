@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <title>AI Stock Dashboard</title>
+  <style>
+    body { font-family: "Segoe UI", Arial, sans-serif; margin: 24px; color: #222; }
+    .error { background: #ffebee; border: 1px solid #ef9a9a; padding: 8px 12px; border-radius: 4px; }
+    form { margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <h1>单标的行情</h1>
+  <form method="get" action="/">
+    <input type="text" name="symbol" value="{{ symbol }}" placeholder="AAPL">
+    <button type="submit">查询</button>
+  </form>
+  {% if error %}
+  <div class="error">{{ error }}</div>
+  {% endif %}
+  {% if chart %}
+  <div id="single-chart">{{ chart|safe }}</div>
+  {% endif %}
+</body>
+</html>
